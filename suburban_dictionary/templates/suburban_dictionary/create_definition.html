@@ -1,0 +1,40 @@
+{% extends "suburban_dictionary/layouts/default.html" %}
+
+{% block title %} Create Term {% endblock %}
+
+{% block body %}
+
+{% include "suburban_dictionary/includes/navbar.html" %}
+
+<div class="container navbar-margin">
+  <div class="create-term-container">
+    <h1>CREATE NEW DEFINITION</h1>
+    <hr>
+    {% include "suburban_dictionary/includes/alert.html" %}
+    <form id="create-term-form" class="mt-4" action="{% url 'create_definition' %}"
+    method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <div class="input-group input-group-lg">
+           <input name="term" type="term" class="form-control" id="term-input"
+           aria-describedby="term" placeholder="term" required></input>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <textarea name="definition" class="form-control"
+          aria-label="definition" placeholder="definition" required></textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <textarea name="example" class="form-control" aria-label="example"
+          placeholder="example" required></textarea>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

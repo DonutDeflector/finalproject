@@ -1,0 +1,24 @@
+{% extends "suburban_dictionary/layouts/default.html" %}
+
+{% block title %} Term Not Found {% endblock %}
+
+{% block body %}
+
+{% include "suburban_dictionary/includes/navbar.html" %}
+
+<div class="container navbar-margin">
+  {% include "suburban_dictionary/includes/terms_searchbar.html" %}
+
+  <div class="no-term-container">
+    <h2>Term Not Found!</h2>
+    <p>
+      Don't worry! Even though the term might not exist, you can still define
+      it yourself!
+    </p>
+    <a class="btn btn-primary" href="{% url 'create_definition' %}" role="button">
+      Define it!
+    </a>
+  </div>
+</div>
+
+{% endblock %}

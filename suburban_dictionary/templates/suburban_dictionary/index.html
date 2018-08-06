@@ -1,0 +1,12 @@
+{% extends "suburban_dictionary/layouts/default.html" %}
+
+{% block title %} Home {% endblock %}
+
+{% block body %}
+
+{% include "suburban_dictionary/includes/navbar.html" %}
+
+<div class="container navbar-margin">
+  {% include "suburban_dictionary/includes/terms_searchbar.html" %}
+</div>
+{% endblock %}

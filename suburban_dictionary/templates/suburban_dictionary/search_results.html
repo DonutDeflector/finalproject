@@ -1,0 +1,24 @@
+{% extends "suburban_dictionary/layouts/default.html" %}
+
+{% block title %} Home {% endblock %}
+
+{% block body %}
+
+{% include "suburban_dictionary/includes/navbar.html" %}
+
+<div class="container navbar-margin">
+  {% include "suburban_dictionary/includes/terms_searchbar.html" %}
+
+  <div class="search-results-container">
+    <ul>
+    {% for search_result in search_results %}
+      <li>
+        <a href="{% url 'term' term_name=search_result %}">
+          {{ search_result }}
+        </a>
+      </li>
+    {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

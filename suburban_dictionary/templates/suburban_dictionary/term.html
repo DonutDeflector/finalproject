@@ -1,0 +1,15 @@
+{% extends "suburban_dictionary/layouts/default.html" %}
+
+{% block title %} {{ term }} {% endblock %}
+
+{% block body %}
+
+  {% include "suburban_dictionary/includes/navbar.html" %}
+
+<div class="container navbar-margin">
+  {% for definition in definitions reversed %}
+    {% include "suburban_dictionary/includes/definition_card.html" %}
+  {% endfor %}
+</div>
+
+{% endblock %}

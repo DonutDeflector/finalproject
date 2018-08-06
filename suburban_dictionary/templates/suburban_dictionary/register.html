@@ -1,0 +1,58 @@
+{% extends "suburban_dictionary/layouts/default.html" %}
+
+{% block title %} Register {% endblock %}
+
+{% block body %}
+
+<div class="d-flex justify-content-center align-items-center entire-height bg-primary">
+  <div class="card login-register-card m-3">
+    <div class="card-body">
+      <h1 class="mb-3">Register</h1>
+      {% include "suburban_dictionary/includes/alert.html" %}
+      <form class="mb-2" action="{% url 'register' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input name="username" type="username" class="form-control"
+          id="username-input" aria-describedby="username"
+          placeholder="username"></input>
+        </div>
+        <div class="form-group">
+          <label for="first-name">First Name</label>
+          <input name="first-name" type="first_name" class="form-control"
+          aria-describedby="first name" id="first-name-input"
+          placeholder="first name">
+        </div>
+        <div class="form-group">
+          <label for="last-name">Last Name</label>
+          <input name="last-name" type="last-name" class="form-control"
+          aria-describedby="last name" id="last-name-input"
+          placeholder="last name">
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input name="email" type="email" class="form-control"
+          aria-describedby="email" id="email-input"
+          placeholder="email@example.com">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input name="password" type="password" class="form-control"
+          id="password-input" aria-describedby="password"
+          placeholder="password"></input>
+        </div>
+        <div class="form-group">
+          <label for="confirm-password">Confirm Password</label>
+          <input name="confirm-password" type="password" class="form-control"
+          id="password-confirm" aria-describedby="confirm password"
+          placeholder="confirm password">
+          </input>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      <span>Already have an account? <a href="{% url 'login' %}">Login</a></span>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

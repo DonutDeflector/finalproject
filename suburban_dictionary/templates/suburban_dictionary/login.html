@@ -1,0 +1,33 @@
+{% extends "suburban_dictionary/layouts/default.html" %}
+
+{% block title %} Login {% endblock %}
+
+{% block body %}
+
+<div class="d-flex justify-content-center align-items-center entire-height bg-primary">
+  <div class="card login-register-card m-3">
+    <div class="card-body">
+      <h1 class="mb-3">Login</h1>
+      {% include "suburban_dictionary/includes/alert.html" %}
+      <form class="mb-2" action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input name="username" type="username" class="form-control"
+          id="username-input" aria-describedby="username"
+          placeholder="username"></input>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input name="password" type="password" class="form-control"
+          id="password-input" aria-describedby="password"
+          placeholder="password"></input>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      <span>No account? <a href="{% url 'register' %}">Register</a></span>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
