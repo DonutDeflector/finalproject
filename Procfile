@@ -1,1 +1,1 @@
-web: gunicorn suburban_dictionary.wsgi --log-file -
+web: gunicorn finalproject.wsgi --log-file -
