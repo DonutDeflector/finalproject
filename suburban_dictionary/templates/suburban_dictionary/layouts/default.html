@@ -6,6 +6,7 @@
   <title>Suburban Dictionary // {% block title %}{% endblock %}</title>
   <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans+Condensed:400,700"
   rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
   integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
   crossorigin="anonymous"></script>
@@ -17,8 +18,8 @@
   crossorigin="anonymous"></script>
   <link rel="stylesheet" href="{% static 'suburban_dictionary/css/suburban_dictionary.css' %}">
   <script src="{% static 'suburban_dictionary/js/fitty.min.js' %}"></script>
-  <script src="{% static 'suburban_dictionary/js/moment-with-locales.min.js' %}"></script>
   <script src="{% static 'suburban_dictionary/js/suburban_dictionary.js' %}"></script>
+  {% include "suburban_dictionary/handlebars/popup_message.html" %}
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 

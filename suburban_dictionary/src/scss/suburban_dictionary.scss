@@ -1,7 +1,9 @@
 /* Variables */
 
-$primary: #00d9bc;
-$secondary: #f24153;
+$primary: #6956e2;
+$secondary: #fb651d;
+
+$danger: #f24153;
 
 $dark: #23181c;
 $light: #fcfced;
@@ -13,6 +15,10 @@ $shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 $shadow2: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 
 $font-family-base: "IBM Plex Sans Condensed", sans-serif;
+
+$border-radius: 0;
+$border-radius-lg: 0;
+$border-radius-sm: 0;
 
 /* Import */
 
@@ -26,7 +32,8 @@ body {
 }
 
 ::selection {
-  background-color: lighten($primary, 50%);
+  background-color: lighten($primary, 25%);
+  color: $black;
 }
 
 /* Text */
@@ -39,6 +46,10 @@ h5,
 h6 {
   font-weight: 700;
   margin: 0;
+}
+
+a {
+  transition: color 0.3s ease;
 }
 
 /* Containers */
@@ -64,6 +75,20 @@ h6 {
 
 .navbar-margin {
   margin-top: 72px;
+}
+
+/* Popup Message */
+
+#popup-message-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba($dark, 0.5);
+  opacity: 0;
+  z-index: -1;
+  transition: 0.5s;
 }
 
 /* Hero */
@@ -103,9 +128,24 @@ h6 {
   width: 100%;
 }
 
-/* Create Term */
+/* New Definition */
 
-.create-term-container {
+.definition-form-container {
   max-width: 768px;
   margin: 0 auto;
+}
+
+#term-input-label,
+#definition-input-label,
+#example-input-label {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Like/Dislike Buttons */
+
+.like-button,
+.dislike-button {
+  cursor: pointer;
+  transition: all 0.3s ease;
 }

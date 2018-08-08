@@ -1,0 +1,24 @@
+<script id="popup-message-template" type="text/x-handlebars-template">
+{% verbatim myblock %}
+  <div id="popup-message" class="card m-2">
+    <div class="card-body">
+      <div class="card-title">
+        <h2>{{ title }}</h2>
+      </div>
+      <div class="card-text">
+        <p>{{ content }}</p>
+        <hr>
+        <div class="d-flex justify-content-end buttons-container">
+          <button id="cancel-button" class="btn btn-primary mr-2">
+            Cancel
+          </button>
+          <button data-definition_id="{{ definition_id }}" id="delete-button"
+          class="btn btn-danger">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endverbatim myblock %}
+</script>

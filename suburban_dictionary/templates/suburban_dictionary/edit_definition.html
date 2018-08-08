@@ -7,20 +7,25 @@
 {% include "suburban_dictionary/includes/navbar.html" %}
 
 <div class="container navbar-margin">
-  <div class="create-definition-container">
-    <h1>CREATE NEW DEFINITION</h1>
-    <hr class="mb-4">
+
+  {% include "suburban_dictionary/includes/terms_searchbar.html" %}
+
+  <div class="edit-definition-container">
+    <h1>EDIT DEFINITION</h1>
+    <hr>
     {% include "suburban_dictionary/includes/alert.html" %}
-    <form id="create-definition-form" action="{% url 'create_definition' %}"
+    <form id="edit-definition-form" class="mt-4"
+    action="{% url 'edit_definition' definition_id=definition_id %}"
     method="post">
       {% csrf_token %}
       <div class="form-group">
         <div class="input-group input-group-lg">
-           <div class="input-group-append">
-             <span class="input-group-text" id="term-input-label">Term</span>
-           </div>
-           <input name="term" type="term" class="form-control" id="term-input"
-           aria-describedby="term" placeholder="term" required></input>
+          <div class="input-group-append">
+            <span class="input-group-text" id="term-input-label">Term</span>
+          </div>
+          <input name="term" type="term" class="form-control" id="term-input"
+          aria-describedby="term" value="{{ term_name | upper }}"
+          disabled></input>
         </div>
       </div>
       <div class="form-group">
@@ -29,7 +34,8 @@
             <span class="input-group-text" id="definition-input-label">Definition</span>
           </div>
           <textarea name="definition" class="form-control"
-          aria-label="definition" placeholder="definition" required></textarea>
+          aria-label="definition" placeholder="definition"
+          required>{{ definition }}</textarea>
         </div>
       </div>
       <div class="form-group">
@@ -38,7 +44,7 @@
             <span class="input-group-text" id="example-input-label">Example</span>
           </div>
           <textarea name="example" class="form-control font-italic"
-          aria-label="example" placeholder="example" required></textarea>
+          aria-label="example" placeholder="example" required>{{ example }}</textarea>
         </div>
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.urls import reverse
+from django.db.models import F
 
 from .models import Term, Definition
 
@@ -18,7 +19,11 @@ def index(request):
     if not request.user.is_authenticated:
         return redirect("login")
 
-    return render(request, "suburban_dictionary/index.html")
+    # fetch latest 20 definitions
+    definitions = Definition.objects.all().order_by("created_date")[:20][::-1]
+
+    return render(request, "suburban_dictionary/index.html",
+                  {"definitions": definitions})
 
 
 def login(request):
@@ -105,7 +110,7 @@ def logout(request):
                    "status": "success"})
 
 
-def create_definition(request):
+def new_definition(request):
     # redirects users to the login page if they are not logged in
     if not request.user.is_authenticated:
         return redirect("login")
@@ -124,7 +129,7 @@ def create_definition(request):
 
         # check to see if any forms are empty, return error message if true
         if name is None or definition is None or example is None:
-            return render(request, "suburban_dictionary/create_definition.html",
+            return render(request, "suburban_dictionary/new_definition.html",
                           {"message": "ERROR: one or more fields were submitted empty.",
                            "status": "danger"})
 
@@ -141,7 +146,9 @@ def create_definition(request):
             term=term, definition=definition, example=example, username=username)
         definition.save()
 
-    return render(request, "suburban_dictionary/create_definition.html")
+        return redirect("term", name)
+
+    return render(request, "suburban_dictionary/new_definition.html")
 
 
 def term(request, term_name):
@@ -163,15 +170,18 @@ def term(request, term_name):
 
 
 def search_for_term(request):
+    # define search_results in anticipation for access check
+    search_results = None
+
     if request.method == "POST":
         # capture form inputs
-        name = request.POST["term"]
+        search_query = request.POST["search_query"]
 
         # convert name to lowercase
-        name = name.lower()
+        search_query = search_query.lower()
 
         # search for matches in the database
-        search_results = Term.objects.filter(name__icontains=name)
+        search_results = Term.objects.filter(name__icontains=search_query)
 
         # if no results are returned, render page to notify user
         if search_results.count() == 0:
@@ -179,14 +189,20 @@ def search_for_term(request):
 
         # if only one term is returned, return page with only that term
         if search_results.count() == 1:
-            term_name = name.replace(" ", "_")
+            term_name = Term.objects.values_list(
+                "name", flat=True).get(name__icontains=search_query)
+            print(term_name)
 
             return redirect("term", term_name)
 
-        # render search page with results
-        return render(request, "suburban_dictionary/search_results.html", {
-            "search_results": search_results
-        })
+    # if user is just accessing the page via url, search_results will still be
+    # None; deny them access
+    if search_results == None:
+        return redirect("index")
+
+    # render search page with results
+    return render(request, "suburban_dictionary/search_results.html", {
+        "search_results": search_results, "search_query": search_query})
 
 
 def like_definition(request):
@@ -200,17 +216,207 @@ def like_definition(request):
         # capture liked term id
         definition_id = data["definition_id"]
 
-        # fetch definition by id
-        definition = Definition.objects.filter(pk=definition_id)
+        # capture the liked term's definition object
+        definition = Definition.objects.get(pk=definition_id)
 
-        # fetch list of users who liked the post
-        definition_liked_by = definition.values("liked_by")
+        # fetches the definition, returns queryset if user has liked the post
+        definition_likes = Definition.objects.values(
+            "likes").filter(pk=definition_id, likes=current_user_id)
 
-        # check to see if user has already liked the definition, if so, remove
-        # their like; otherwise, submit their like
-        if definition.filter(liked_by=current_user_id):
-            print("who")
+        # if user already liked, remove user's like and decrements like counter
+        if definition_likes:
+            # removes user from the liked list
+            definition.likes.remove(current_user_id)
+
+            # set variable to denote state of user's like
+            liked = False
+
+        # else, add their like and increment the likes counter
         else:
-            print("ha")
+            # add user to the liked list
+            definition.likes.add(User.objects.get(pk=current_user_id))
 
-        return JsonResponse({"success": True})
+            # set variable to denote state of user's like
+            liked = True
+
+        # fetch definition, returns queryset if user has disliked it
+        definition_dislikes = Definition.objects.values(
+            "dislikes").filter(pk=definition_id, dislikes=current_user_id)
+
+        # check to see if the user has disliked the definition
+        if definition_dislikes:
+            # remove user from the disliked list
+            definition.dislikes.remove(current_user_id)
+
+        # find number of definition likes and dislikes
+        likes_count = definition.likes.count()
+        dislikes_count = definition.dislikes.count()
+
+        # return number of likes and user's like and dislike status as JSON
+        return JsonResponse({"liked": liked, "likes_count": likes_count,
+                             "dislikes_count": dislikes_count})
+
+    return HttpResponseForbidden()
+
+
+def dislike_definition(request):
+    if request.method == "POST":
+        # fetch the user making the request
+        current_user_id = request.user.id
+
+        # capture ajax request data
+        data = json.loads(request.body)
+
+        # capture disliked term id
+        definition_id = data["definition_id"]
+
+        # capture the disliked term's definition object
+        definition = Definition.objects.get(pk=definition_id)
+
+        # fetch definition, returns queryset if user has disliked it
+        definition_dislikes = Definition.objects.values(
+            "dislikes").filter(pk=definition_id, dislikes=current_user_id)
+
+        # if user already disliked, remove user's dislike and decrements dislike
+        # counter
+        if definition_dislikes:
+            # removes user from the list
+            definition.dislikes.remove(current_user_id)
+
+            # set variable to denote state of user's dislike
+            disliked = False
+        # else, add their dislike and increment the dislikes counter
+        else:
+            # add user to the list
+            definition.dislikes.add(User.objects.get(pk=current_user_id))
+
+            # set variable to denote state of user's dislike
+            disliked = True
+
+        # fetches the definition, returns queryset if user has liked the post
+        definition_likes = Definition.objects.values(
+            "likes").filter(pk=definition_id, likes=current_user_id)
+
+        # if user already liked, remove user's like and decrements like counter
+        if definition_likes:
+            # removes user from the liked list
+            definition.likes.remove(current_user_id)
+
+        # find number of definition likes and dislikes
+        likes_count = definition.likes.count()
+        dislikes_count = definition.dislikes.count()
+
+        # return number of likes and user's like status as JSON
+        return JsonResponse({"disliked": disliked,
+                             "dislikes_count": dislikes_count,
+                             "likes_count": likes_count})
+
+    return HttpResponseForbidden()
+
+
+def user_vote(request):
+    if request.method == "POST":
+        # fetch current user making the request
+        current_user_id = request.user.id
+
+        # capture ajax request data
+        data = json.loads(request.body)
+
+        # capture disliked term id
+        definition_id = data["definition_id"]
+
+        # fetch definition, returns queryset if user has liked the post
+        definition_likes = Definition.objects.values(
+            "likes").filter(pk=definition_id, likes=current_user_id)
+
+        # if user has liked the definition, set variables accordinly
+        if definition_likes:
+            liked = True
+            disliked = False
+        # else, see if user had disliked defintion
+        else:
+            # fetch definition, returns queryset if user has disliked the post
+            definition_dislikes = Definition.objects.values(
+                "dislikes").filter(pk=definition_id, dislikes=current_user_id)
+
+            # if user has disliked the definition, set variables accordingly
+            if definition_dislikes:
+                liked = False
+                disliked = True
+            # if user hasn't voted, set variables accordingly
+            else:
+                liked = False
+                disliked = False
+
+        # return JSON response
+        return JsonResponse({"liked": liked, "disliked": disliked})
+
+    return HttpResponseForbidden()
+
+
+def edit_definition(request, definition_id):
+    # find correct definition entry
+    definition_entry = Definition.objects.get(pk=definition_id)
+
+    # extract name of the term
+    term_name = definition_entry.term
+
+    # pathway for submissions
+    if request.method == "POST":
+
+        # capture definition and example
+        definition = request.POST["definition"]
+        example = request.POST["example"]
+
+        # update definition_entry
+        definition_entry.definition = definition
+        definition_entry.example = example
+        definition_entry.save()
+
+        # redirect to terms page with success message
+        return redirect("term", term_name=term_name)
+
+    # extract definition and example content
+    definition = definition_entry.definition
+    example = definition_entry.example
+
+    # render page with pre-populated fields
+    return render(request, "suburban_dictionary/edit_definition.html",
+                  {"term_name": term_name, "definition_id": definition_id,
+                   "definition": definition, "example": example})
+
+
+def delete_definition(request):
+    if request.method == "POST":
+        # fetch the user making the request
+        current_user_id = request.user.id
+
+        # capture ajax request data
+        data = json.loads(request.body)
+
+        # capture liked term id
+        definition_id = data["definition_id"]
+
+        # find corresponding definition, make sure username matches current user
+        definition = Definition.objects.get(
+            pk=definition_id, username=current_user_id)
+
+        # delete definition and reload page with alert if found, else inform
+        # the user
+        if definition:
+            # extract term name from definition
+            term_name = definition.term
+
+            # construct alert content
+            status = "success"
+            message = "Definition successfully deleted."
+
+            # delete definition from database
+            definition.delete()
+
+            # construct url with argument
+            url = reverse("term", args={term_name})
+
+            return JsonResponse({"success": True, "url": url})
+        else:
+            return JsonResponse({"error": "Definition failed to be deleted."})

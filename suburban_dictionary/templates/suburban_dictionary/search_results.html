@@ -1,6 +1,6 @@
 {% extends "suburban_dictionary/layouts/default.html" %}
 
-{% block title %} Home {% endblock %}
+{% block title %} Search // {{ search_query }} {% endblock %}
 
 {% block body %}
 
@@ -10,11 +10,16 @@
   {% include "suburban_dictionary/includes/terms_searchbar.html" %}
 
   <div class="search-results-container">
+    <h2 class="text-uppercase">
+      {{ search_results | length }} Results for
+      <span class="font-italic">{{ search_query }}</span>
+    </h2>
+    <hr class="mb-4">
     <ul>
     {% for search_result in search_results %}
       <li>
         <a href="{% url 'term' term_name=search_result %}">
-          {{ search_result }}
+          {{ search_result | upper }}
         </a>
       </li>
     {% endfor %}

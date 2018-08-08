@@ -2,8 +2,9 @@
   {% csrf_token %}
   <div class="form-row">
     <div class="form-group col-8 col-md-10">
-      <input name="term" type="term" class="form-control" id="term-input"
-      aria-describedby="term" placeholder="search for a term" required></input>
+      <input name="search_query" type="search_query" class="form-control"
+      id="search-query-input" aria-describedby="search query"
+      placeholder="search for a term" required></input>
     </div>
     <div class="form-group col-4 col-md-2">
       <button class="btn btn-primary full-width">Search</button>

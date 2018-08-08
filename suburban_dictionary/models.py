@@ -22,12 +22,9 @@ class Definition(models.Model):
     username = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
-    edited_date = models.DateTimeField(auto_now=True)
-    likes = models.PositiveIntegerField(default=0)
-    liked_by = models.ManyToManyField(
+    likes = models.ManyToManyField(
         settings.AUTH_USER_MODEL, blank=True, related_name="liked")
-    dislikes = models.PositiveIntegerField(default=0)
-    disliked_by = models.ManyToManyField(
+    dislikes = models.ManyToManyField(
         settings.AUTH_USER_MODEL, blank=True, related_name="disliked")
 
     class Meta:

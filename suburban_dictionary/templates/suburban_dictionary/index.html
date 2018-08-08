@@ -4,9 +4,18 @@
 
 {% block body %}
 
+{% include "suburban_dictionary/includes/popup_message_container.html" %}
+
 {% include "suburban_dictionary/includes/navbar.html" %}
 
 <div class="container navbar-margin">
   {% include "suburban_dictionary/includes/terms_searchbar.html" %}
+  <div class="latest-definitions-container">
+    <h1>LATEST DEFINITIONS</h1>
+    <hr class="mb-4">
+    {% for definition in definitions %}
+      {% include "suburban_dictionary/includes/definition_card.html" %}
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}
