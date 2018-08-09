@@ -10,40 +10,43 @@
 
   {% include "suburban_dictionary/includes/terms_searchbar.html" %}
 
-  <div class="edit-definition-container">
+  <div class="edit-definition-container mb-3">
     <h1>EDIT DEFINITION</h1>
-    <hr>
+    <hr class="mb-4">
     {% include "suburban_dictionary/includes/alert.html" %}
-    <form id="edit-definition-form" class="mt-4"
+    <form id="edit-definition-form"
     action="{% url 'edit_definition' definition_id=definition_id %}"
     method="post">
       {% csrf_token %}
       <div class="form-group">
-        <div class="input-group input-group-lg">
-          <div class="input-group-append">
+        <div class="form-row input-group input-group-lg">
+          <div class="col-4 col-sm-3 col-md-2 input-group-append">
             <span class="input-group-text" id="term-input-label">Term</span>
           </div>
-          <input name="term" type="term" class="form-control" id="term-input"
+          <input name="term" type="term"
+          class="col-8 col-sm-9 col-md-10 form-control" id="term-input"
           aria-describedby="term" value="{{ term_name | upper }}"
           disabled></input>
         </div>
       </div>
       <div class="form-group">
-        <div class="input-group">
-          <div class="input-group-append">
+        <div class="form-row input-group">
+          <div class="col-4 col-sm-3 col-md-2 input-group-append">
             <span class="input-group-text" id="definition-input-label">Definition</span>
           </div>
-          <textarea name="definition" class="form-control"
+          <textarea name="definition"
+          class="col-8 col-sm-9 col-md-10 form-control"
           aria-label="definition" placeholder="definition"
           required>{{ definition }}</textarea>
         </div>
       </div>
       <div class="form-group">
-        <div class="input-group">
-          <div class="input-group-append">
+        <div class="form-row input-group">
+          <div class="col-4 col-sm-3 col-md-2 input-group-append">
             <span class="input-group-text" id="example-input-label">Example</span>
           </div>
-          <textarea name="example" class="form-control font-italic"
+          <textarea name="example"
+          class="col-8 col-sm-9 col-md-10 form-control font-italic"
           aria-label="example" placeholder="example" required>{{ example }}</textarea>
         </div>
       </div>

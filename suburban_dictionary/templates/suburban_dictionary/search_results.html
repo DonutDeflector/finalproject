@@ -1,6 +1,6 @@
 {% extends "suburban_dictionary/layouts/default.html" %}
 
-{% block title %} Search // {{ search_query }} {% endblock %}
+{% block title %} Search // {{ search_query | upper }} {% endblock %}
 
 {% block body %}
 
@@ -11,8 +11,7 @@
 
   <div class="search-results-container">
     <h2 class="text-uppercase">
-      {{ search_results | length }} Results for
-      <span class="font-italic">{{ search_query }}</span>
+      {{ search_results | length }} Results for "{{ search_query }}"</span>
     </h2>
     <hr class="mb-4">
     <ul>

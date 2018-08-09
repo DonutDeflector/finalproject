@@ -4,7 +4,8 @@
 
 {% block body %}
 
-<div class="d-flex justify-content-center align-items-center entire-height bg-primary">
+<div class="d-flex flex-column justify-content-center align-items-center
+entire-height bg-hero">
   <div class="card login-register-card m-3">
     <div class="card-body">
       <h1 class="mb-3">Login</h1>
@@ -28,6 +29,7 @@
       <span>No account? <a href="{% url 'register' %}">Register</a></span>
     </div>
   </div>
+  {% include "suburban_dictionary/includes/back_home.html" %}
 </div>
 
 {% endblock %}

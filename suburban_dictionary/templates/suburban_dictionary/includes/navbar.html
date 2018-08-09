@@ -6,6 +6,20 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto text-uppercase">
+      {% if page == "landing_page" %}
+      <li class="nav-item">
+        <a class="nav-link btn-primary mr-3 px-3" role="button"
+        href="{% url 'login' %}">
+          Login
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link btn-primary px-3" role="button"
+        href="{% url 'register' %}">
+          Register
+        </a>
+      </li>
+      {% else %}
       <li class="nav-item">
         <a class="nav-link" href="{% url 'index' %}">Home
         </a>
@@ -19,6 +33,7 @@
         <a class="nav-link text-danger" href="{% url 'logout' %}">Logout
         </a>
       </li>
+      {% endif %}
     </ul>
   </div>
 </nav>

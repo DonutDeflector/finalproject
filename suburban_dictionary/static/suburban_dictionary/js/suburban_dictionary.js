@@ -1,7 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  fitty(".hero-title");
-  fitty(".hero-subtitle");
-
   //
   // fetch scrf token
   //

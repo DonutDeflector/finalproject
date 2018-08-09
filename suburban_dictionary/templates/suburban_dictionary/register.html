@@ -4,7 +4,7 @@
 
 {% block body %}
 
-<div class="d-flex justify-content-center align-items-center entire-height bg-primary">
+<div class="d-flex flex-column justify-content-center align-items-center entire-height bg-hero">
   <div class="card login-register-card m-3">
     <div class="card-body">
       <h1 class="mb-3">Register</h1>
@@ -18,18 +18,6 @@
           placeholder="username"></input>
         </div>
         <div class="form-group">
-          <label for="first-name">First Name</label>
-          <input name="first-name" type="first_name" class="form-control"
-          aria-describedby="first name" id="first-name-input"
-          placeholder="first name">
-        </div>
-        <div class="form-group">
-          <label for="last-name">Last Name</label>
-          <input name="last-name" type="last-name" class="form-control"
-          aria-describedby="last name" id="last-name-input"
-          placeholder="last name">
-        </div>
-        <div class="form-group">
           <label for="email">Email</label>
           <input name="email" type="email" class="form-control"
           aria-describedby="email" id="email-input"
@@ -40,6 +28,9 @@
           <input name="password" type="password" class="form-control"
           id="password-input" aria-describedby="password"
           placeholder="password"></input>
+          <small id="password-help" class="form-text text-muted">
+            Password must be at least 8 characters long.
+          </small>
         </div>
         <div class="form-group">
           <label for="confirm-password">Confirm Password</label>
@@ -53,6 +44,7 @@
       <span>Already have an account? <a href="{% url 'login' %}">Login</a></span>
     </div>
   </div>
+  {% include "suburban_dictionary/includes/back_home.html" %}
 </div>
 
 {% endblock %}

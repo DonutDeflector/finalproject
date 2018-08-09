@@ -1,20 +1,102 @@
 {% extends "suburban_dictionary/layouts/default.html" %}
 
-{% block title %} Home {% endblock %}
+{% block title %} Defined By You {% endblock %}
 
 {% block body %}
 
+{% with page="landing_page" %}
 {% include "suburban_dictionary/includes/navbar.html" %}
+{% endwith %}
 
-<div class="d-flex align-items-center hero-container bg-primary text-center">
+<div class="d-flex align-items-center hero-container bg-hero text-white text-center">
   <div class="hero-title-container">
-    <h1>
-      <span class="hero-title">SUBURBAN</span>
-      <span class="hero-title">DICTIONARY</span>
+    <h1 class="hero-title">
+      SUBURBAN DICTIONARY
     </h1>
-    <h5 class="hero-subtitle">DEFINED BY YOU.</h5>
+    <h4 class="hero-subtitle">DEFINED BY YOU.</h4>
   </div>
-  <div class="hero-content">
+</div>
+
+<div class="container mt-3 pb-3">
+  <div class="row mb-3">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          <h2>ABOUT</h2>
+        </div>
+        <div class="card-body">
+          <p class="m-0">
+            Suburban Dictionary is a simple clone of Urban Dictionary. It allows
+            users to login or register for an account to create new definitions,
+            and vote on definitions that others have already made.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          <h2>FUNCTIONALITY RUNDOWN</h2>
+        </div>
+        <div class="card-body">
+          <h3 class="text-uppercase">User Login, Registration, Logout</h3>
+            <p>
+              Users are able to register an account by choosing a username,
+              inputting their email, and selecting their password. They are able
+              to then login using their username and password. Once logged in,
+              users can logout by clicking on the "logout" button in the navbar.
+            </p>
+          <h3 class="text-uppercase">New Definition</h3>
+            <p>
+              Users are able to add a new definition via a form submission.
+              Users input the term that they want to define, create definition
+              for it, and use it in a sentence. Afterwards, they are redirected
+              to the page for the term that they have defined.
+            </p>
+          <h3 class="text-uppercase">Displaying Definitions of Terms</h3>
+            <p>
+              Users are able to view the submitted definitions of terms. By
+              default, these terms are sorted by recency in order to bring fresh
+              content to the user. In addition to displaying the name,
+              definition, and examples of the term, it also displays the author,
+              date of submission, and user votes. If the author and the user are
+              the same, the edit and delete buttons are also displayed.
+            </p>
+          <h3 class="text-uppercase">Searching for a Term</h3>
+            <p>
+              Users are able to use the search bar at the top of each page to
+              find a term. If only one result if returned for the search query,
+              the user will be automatically redirected to the term's page. If
+              multiple results are found, they are taken to a search results
+              page in which they can find the term they are looking for.
+            </p>
+          <h3 class="text-uppercase">Voting on Definitions</h3>
+            <p>
+            Users are able to vote on terms to either show approval or
+            disapproval of a definition. This allows other users to gage the
+            quality of definitions.
+            </p>
+          <h3 class="text-uppercase">Editing Definitions</h3>
+            <p>
+            If a user feels like their definition could be better defined, or an
+            example sentence that they provided was inadequate, they are able to
+            edit their definition.
+            </p>
+          <h3 class="text-uppercase">Deleting Definitions</h3>
+            <p class="m-0">
+            If a user feels like their definition is inadequate or not well
+            received, and they are unable to edit it to make it better, they are
+            able to delete it. When the delete button is pressed, a popup
+            message is displayed in order to confirm that the user actually
+            wants to delete the definition. It gives the user a chance to cancel
+            the action if they don't actually want to delete the definition and
+            allows them to delete it if the action was purposeful.
+            </p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 

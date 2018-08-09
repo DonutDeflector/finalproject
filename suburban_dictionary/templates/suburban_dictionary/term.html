@@ -1,6 +1,6 @@
 {% extends "suburban_dictionary/layouts/default.html" %}
 
-{% block title %} {{ term }} {% endblock %}
+{% block title %} {{ term | upper }} {% endblock %}
 
 {% block body %}
   {% include "suburban_dictionary/includes/popup_message_container.html" %}

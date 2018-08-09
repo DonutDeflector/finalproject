@@ -17,13 +17,15 @@ import json
 def index(request):
     # redirects users to the login page if they are not logged in
     if not request.user.is_authenticated:
-        return redirect("login")
+        return render(request, "suburban_dictionary/landing_page.html")
 
-    # fetch latest 20 definitions
-    definitions = Definition.objects.all().order_by("created_date")[:20][::-1]
+    if request.user.is_authenticated:
+        # fetch latest 20 definitions
+        definitions = Definition.objects.all().order_by("created_date")[
+            :20][::-1]
 
-    return render(request, "suburban_dictionary/index.html",
-                  {"definitions": definitions})
+        return render(request, "suburban_dictionary/index.html",
+                      {"definitions": definitions})
 
 
 def login(request):
@@ -55,16 +57,10 @@ def login(request):
 def register(request):
     if request.method == "POST":
         # capture form inputs
-        first_name = request.POST["first-name"]
-        last_name = request.POST["last-name"]
         username = request.POST["username"]
         email = request.POST["email"]
         password = request.POST["password"]
         confirm_password = request.POST["confirm-password"]
-
-        # Capitalize first and last name
-        first_name.capitalize()
-        last_name.capitalize()
 
         # if passwords match, proceed; else, inform the user
         if password == confirm_password:
@@ -73,6 +69,12 @@ def register(request):
                 return render(request, "suburban_dictionary/register.html",
                               {"message": "Username already taken.",
                                "status": "danger"})
+            # if the username is just whitespace, inform user
+            if username.isspace():
+                return render(request, "suburban_dictionary/register.html",
+                              {"message": "Username cannot be completely whitespace.",
+                               "status": "danger"})
+
             # if the password is too short, inform the user
             if len(password) < 8:
                 return render(request, "suburban_dictionary/register.html",
@@ -81,8 +83,7 @@ def register(request):
                                "status": "danger"})
             # register user
             user = User.objects.create_user(
-                username=username, first_name=first_name, last_name=last_name,
-                email=email, password=password)
+                username=username, email=email, password=password)
             user.save()
 
             # redirect user to login page, display success message
@@ -105,9 +106,7 @@ def register(request):
 def logout(request):
     logout_request(request)
 
-    return render(request, "suburban_dictionary/login.html",
-                  {"message": "Logged out.",
-                   "status": "success"})
+    return redirect("index")
 
 
 def new_definition(request):
@@ -355,8 +354,20 @@ def user_vote(request):
 
 
 def edit_definition(request, definition_id):
-    # find correct definition entry
-    definition_entry = Definition.objects.get(pk=definition_id)
+    # get current user's id
+    current_user_id = request.user.id
+
+    # filter definitions for the user's requested definition
+    definition_entry = Definition.objects.filter(
+        pk=definition_id, username=current_user_id)
+
+    # if the definition entry exists, grab the definition object
+    if definition_entry.exists():
+        definition_entry = Definition.objects.get(
+            pk=definition_id, username=current_user_id)
+    # else, inform user that the page is restricted
+    else:
+        return HttpResponseForbidden()
 
     # extract name of the term
     term_name = definition_entry.term
